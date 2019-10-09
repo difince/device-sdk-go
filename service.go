@@ -27,7 +27,6 @@ import (
 	"github.com/edgexfoundry/device-sdk-go/internal/controller"
 	"github.com/edgexfoundry/device-sdk-go/internal/provision"
 	dsModels "github.com/edgexfoundry/device-sdk-go/pkg/models"
-	"github.com/edgexfoundry/go-mod-core-contracts/clients/types"
 	contract "github.com/edgexfoundry/go-mod-core-contracts/models"
 	"github.com/google/uuid"
 )
@@ -87,7 +86,7 @@ func (s *Service) Start(errChan chan error) (err error) {
 
 	// initialize devices, objects & profiles
 	cache.InitCache()
-	err = provision.LoadProfiles(common.CurrentConfig.Device.ProfilesDir)
+	err = provision.LoadProfiles(/*common.CurrentConfig.Device.ProfilesDir*/"/home/difince/git/device-sdk-go/example/cmd/device-simple/res")
 	if err != nil {
 		return fmt.Errorf("Failed to create the pre-defined Device Profiles")
 	}
@@ -138,7 +137,8 @@ func selfRegister() error {
 	ds, err := common.DeviceServiceClient.DeviceServiceForName(common.ServiceName, ctx)
 
 	if err != nil {
-		if errsc, ok := err.(*types.ErrServiceClient); ok && (errsc.StatusCode == http.StatusNotFound) {
+		//errsc, ok := err.(*types.ErrServiceClient)
+		if (true) {
 			common.LoggingClient.Info(fmt.Sprintf("Device Service %s doesn't exist, creating a new one", ds.Name))
 			ds, err = createNewDeviceService()
 		} else {
@@ -194,7 +194,7 @@ func makeNewAddressable() (*contract.Addressable, error) {
 	ctx := context.WithValue(context.Background(), common.CorrelationHeader, uuid.New().String())
 	addr, err := common.AddressableClient.AddressableForName(common.ServiceName, ctx)
 	if err != nil {
-		if errsc, ok := err.(*types.ErrServiceClient); ok && (errsc.StatusCode == http.StatusNotFound) {
+		if true {
 			common.LoggingClient.Info(fmt.Sprintf("Addressable %s doesn't exist, creating a new one", common.ServiceName))
 			millis := time.Now().UnixNano() / int64(time.Millisecond)
 			addr = contract.Addressable{

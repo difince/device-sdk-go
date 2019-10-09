@@ -33,7 +33,7 @@ func processAsyncResults() {
 
 		for _, cv := range acv.CommandValues {
 			// get the device resource associated with the rsp.RO
-			dr, ok := cache.Profiles().DeviceResource(device.Profile.Name, cv.DeviceResourceName)
+			dr, ok := cache.Profiles().DeviceResource(device.ProfileName, cv.DeviceResourceName)
 			if !ok {
 				common.LoggingClient.Error(fmt.Sprintf("processAsyncResults - Device Resource %s not found in Device %s", cv.DeviceResourceName, acv.DeviceName))
 				continue
@@ -53,7 +53,7 @@ func processAsyncResults() {
 				cv = dsModels.NewStringValue(cv.DeviceResourceName, cv.Origin, fmt.Sprintf("Assertion failed for device resource, with value: %s and assertion: %s", cv.String(), dr.Properties.Value.Assertion))
 			}
 
-			ro, err := cache.Profiles().ResourceOperation(device.Profile.Name, cv.DeviceResourceName, common.GetCmdMethod)
+			ro, err := cache.Profiles().ResourceOperation(device.ProfileName, cv.DeviceResourceName, common.GetCmdMethod)
 			if err != nil {
 				common.LoggingClient.Error(fmt.Sprintf("processAsyncResults - getting resource operation failed: %s", err.Error()))
 				continue

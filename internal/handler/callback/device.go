@@ -29,15 +29,21 @@ func handleDevice(method string, id string) common.AppError {
 			return appErr
 		}
 
-		_, exist := cache.Profiles().ForName(device.Profile.Name)
+		_, exist := cache.Profiles().ForName(device.ProfileName)
 		if exist == false {
-			err = cache.Profiles().Add(device.Profile)
+			profile, err := common.DeviceProfileClient.DeviceProfileForName(device.ProfileName, ctx)
+			if err != nil {
+				appErr := common.NewNotFoundError(err.Error(), err)
+				common.LoggingClient.Error(fmt.Sprintf("Cannot find the device profile with name % Core Metadata: %v", device.ProfileName, err))
+				return appErr
+			}
+			err = cache.Profiles().Add(profile)
 			if err == nil {
-				provision.CreateDescriptorsFromProfile(&device.Profile)
-				common.LoggingClient.Info(fmt.Sprintf("Added device profile %s", device.Profile.Id))
+				provision.CreateDescriptorsFromProfile(&profile)
+				common.LoggingClient.Info(fmt.Sprintf("Added device profile %s", profile.Id))
 			} else {
 				appErr := common.NewServerError(err.Error(), err)
-				common.LoggingClient.Error(fmt.Sprintf("Couldn't add device profile %s: %v", device.Profile.Name, err.Error()))
+				common.LoggingClient.Error(fmt.Sprintf("Couldn't add device profile %s: %v", profile.Name, err.Error()))
 				return appErr
 			}
 		}

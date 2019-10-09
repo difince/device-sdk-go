@@ -41,3 +41,7 @@ func (endpoint Endpoint) Monitor(params types.EndpointParams, ch chan string) {
 		time.Sleep(time.Second * time.Duration(params.Interval))
 	}
 }
+
+func (endpoint Endpoint) Fetch(params types.EndpointParams) string {
+	return "Do nothing"
+}

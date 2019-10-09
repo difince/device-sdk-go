@@ -101,7 +101,7 @@ func CompareCoreCommands(a []contract.Command, b []contract.Command) bool {
 
 func CompareDevices(a contract.Device, b contract.Device) bool {
 	labelsOk := CompareStrings(a.Labels, b.Labels)
-	profileOk := CompareDeviceProfiles(a.Profile, b.Profile)
+	//profileOk := CompareDeviceProfiles(a.Profile, b.Profile)
 	serviceOk := CompareDeviceServices(a.Service, b.Service)
 
 	return reflect.DeepEqual(a.Protocols, b.Protocols) &&
@@ -111,8 +111,8 @@ func CompareDevices(a contract.Device, b contract.Device) bool {
 		a.Location == b.Location &&
 		a.Name == b.Name &&
 		a.OperatingState == b.OperatingState &&
+		a.ProfileName == b.ProfileName &&
 		labelsOk &&
-		profileOk &&
 		serviceOk
 }
 

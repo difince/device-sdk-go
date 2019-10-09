@@ -88,9 +88,9 @@ func (s *SimpleDriver) HandleReadCommands(deviceName string, protocols map[strin
 		// Show a binary/image representation of the switch's on/off value
 		buf := new(bytes.Buffer)
 		if s.switchButton == true {
-			err = getImageBytes("./res/on.png", buf)
+			err = getImageBytes("/home/difince/git/device-sdk-go/example/cmd/device-simple/res/on.png", buf)
 		} else {
-			err = getImageBytes("./res/off.jpg", buf)
+			err = getImageBytes("/home/difince/git/device-sdk-go/example/cmd/device-simple/res/off.jpg", buf)
 		}
 		cvb, _ := dsModels.NewBinaryValue(reqs[0].DeviceResourceName, now, buf.Bytes())
 		res[0] = cvb

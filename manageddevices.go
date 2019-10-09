@@ -27,9 +27,9 @@ func (s *Service) AddDevice(device contract.Device) (id string, err error) {
 
 	common.LoggingClient.Debug(fmt.Sprintf("Adding managed device: : %s\n", device.Name))
 
-	prf, ok := cache.Profiles().ForName(device.Profile.Name)
+	_, ok := cache.Profiles().ForName(device.ProfileName)
 	if !ok {
-		errMsg := fmt.Sprintf("Device Profile %s doesn't exist for Device %s", device.Profile.Name, device.Name)
+		errMsg := fmt.Sprintf("Device Profile %s doesn't exist for Device %s", device.ProfileName, device.Name)
 		common.LoggingClient.Error(errMsg)
 		return "", fmt.Errorf(errMsg)
 	}
@@ -37,7 +37,7 @@ func (s *Service) AddDevice(device contract.Device) (id string, err error) {
 	millis := time.Now().UnixNano() / int64(time.Millisecond)
 	device.Origin = millis
 	device.Service = common.CurrentDeviceService
-	device.Profile = prf
+	//device.Profile = prf
 	common.LoggingClient.Debug(fmt.Sprintf("Adding Device: %s", device.Name))
 
 	ctx := context.WithValue(context.Background(), common.CorrelationHeader, uuid.New().String())
